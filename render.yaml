@@ -6,8 +6,4 @@ services:
     dockerfilePath: ./Dockerfile
     envVars:
       - key: PORT
-        value: "8090"
-    disk:
-      name: pbdata
-      mountPath: /app/pb_data
-      sizeGB: 1
+        value: "80"
