@@ -48,7 +48,7 @@ export default function ProductCard({ product, selected, onToggle, showCheckbox,
           </div>
           <h3 className="font-medium text-sm truncate">{product.name}</h3>
 
-          {/* 核心信息：克重 + 箱规 + 包装尺寸 */}
+          {/* 核心信息：克重 + 规格 + 包装尺寸 */}
           <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5 text-xs">
             <span className="text-gray-700">
               <span className="text-gray-400">克重 </span>
@@ -58,12 +58,6 @@ export default function ProductCard({ product, selected, onToggle, showCheckbox,
               <span className="text-gray-400">规格 </span>
               <strong>{product.spec || '-'}</strong>
             </span>
-            {product.pcsPerBox > 0 && (
-              <span className="text-gray-700">
-                <span className="text-gray-400">箱规 </span>
-                <strong>{product.pcsPerBox}套/箱</strong>
-              </span>
-            )}
             {hasPackDim ? (
               <span className="text-green-700">
                 <span className="text-gray-400">尺寸 </span>
@@ -79,7 +73,6 @@ export default function ProductCard({ product, selected, onToggle, showCheckbox,
           <div className="flex gap-3 mt-1 text-[10px] text-gray-400">
             <span>料价: ¥{product.materialPrice || '-'}</span>
             <span>出厂价: ¥{product.factoryPrice || '-'}</span>
-            {product.boxSize && <span>原箱规: {product.boxSize}</span>}
           </div>
         </div>
         {!showCheckbox && (
