@@ -143,7 +143,8 @@ app.get('/api/health', async (req, res) => {
 
 // 静态文件（前端 SPA）
 app.use(express.static(join(__dirname, 'dist')));
-app.get('*', (req, res) => {
+// Express 5 catch-all (SPA fallback)
+app.use((req, res) => {
   res.sendFile(join(__dirname, 'dist', 'index.html'));
 });
 
