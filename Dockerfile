@@ -8,21 +8,17 @@ RUN npm ci --legacy-peer-deps
 COPY . .
 RUN npm run build
 
-# Stage 2: Nginx serves the SPA
-FROM nginx:alpine
+# Stage 2: Node.js server (Express + PostgreSQL API + static frontend)
+FROM node:20-alpine
 
-# Copy built frontend
-COPY --from=builder /build/dist/ /usr/share/nginx/html/
+WORKDIR /app
 
-# SPA fallback: all routes → index.html (compatible with HashRouter)
-RUN echo 'server { \
-    listen 80; \
-    root /usr/share/nginx/html; \
-    index index.html; \
-    location / { try_files $uri $uri/ /index.html; } \
-    location /api/ { return 404; } \
-}' > /etc/nginx/conf.d/default.conf
+COPY package.json package-lock.json ./
+RUN npm ci --legacy-peer-deps --omit=dev
 
-EXPOSE 80
+COPY --from=builder /build/dist/ /app/dist/
+COPY server.js /app/
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 3000
+
+CMD ["node", "server.js"]
