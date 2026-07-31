@@ -6,7 +6,7 @@ const fields = [
   { key: 'category', label: '产品分类', type: 'text' },
   { key: 'name', label: '名称', type: 'text' },
   { key: 'capacityMl', label: '容量 (ml)', type: 'number' },
-  { key: 'spec', label: '规格/套', type: 'number' },
+  { key: 'spec', label: '规格/套', type: 'text' },
   { key: 'boxSize', label: '箱规尺寸', type: 'text' },
   { key: 'weightGrams', label: '成套克重 (g)', type: 'number' },
   { key: 'pcsPerBox', label: '每箱套数', type: 'number' },
