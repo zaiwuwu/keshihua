@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import {
   ChevronRight, Database, Trash2, RefreshCw,
   FileText, Upload, Calculator, MessageSquare, AlertCircle,
-  Package, FileBarChart, History, Settings2, HardDrive,
+  Package, FileBarChart, History, Settings2, HardDrive, Cloud, CloudOff,
 } from 'lucide-react';
 import useSettingsStore from '../stores/settingsStore';
 import useProductStore from '../stores/productStore';
 import usePriceStore from '../stores/priceStore';
 import useQuotationStore from '../stores/quotationStore';
 import db from '../db/database';
+import { saveSupabaseConfig, getSupabaseConfig, testSupabaseConnection, pushAllToSupabase, pullAllFromSupabase } from '../db/supabase';
 import FloatingScrollButton from '../components/FloatingScrollButton';
 import CustomScrollbar from '../components/CustomScrollbar';
 
@@ -81,6 +82,12 @@ export default function ProfilePage() {
   const [defaultMarkup, setDefaultMarkup] = useState('');
   const [defaultMode, setDefaultMode] = useState('default');
   const [clearing, setClearing] = useState(false);
+  // Supabase sync
+  const [sbUrl, setSbUrl] = useState('');
+  const [sbKey, setSbKey] = useState('');
+  const [sbConnected, setSbConnected] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState('');
 
   useEffect(() => {
     loadSettings();
@@ -124,6 +131,41 @@ export default function ProfilePage() {
     if (pricingMode !== mode) {
       await setPricingMode(mode);
     }
+  };
+
+  // Supabase 配置加载
+  useEffect(() => {
+    (async () => {
+      const cfg = await getSupabaseConfig();
+      if (cfg) { setSbUrl(cfg.url); setSbKey(cfg.anonKey); setSbConnected(true); }
+    })();
+  }, []);
+
+  const handleSaveSbConfig = async () => {
+    if (!sbUrl || !sbKey) return;
+    await saveSupabaseConfig(sbUrl, sbKey);
+    try { await testSupabaseConnection(sbUrl, sbKey); setSbConnected(true); setSyncMsg('连接成功'); }
+    catch { setSbConnected(false); setSyncMsg('连接失败，请检查配置'); }
+  };
+
+  const handlePush = async () => {
+    setSyncing(true); setSyncMsg('推送中...');
+    try {
+      const r = await pushAllToSupabase();
+      const ok = r.filter(x => x.status === 'ok').length;
+      setSyncMsg(`已推送 ${ok}/${r.length} 条记录`);
+    } catch (e) { setSyncMsg('推送失败: ' + e.message); }
+    setSyncing(false);
+  };
+
+  const handlePull = async () => {
+    setSyncing(true); setSyncMsg('拉取中...');
+    try {
+      const n = await pullAllFromSupabase();
+      await loadProducts(); await loadPrice(); await loadQuotations();
+      setSyncMsg(`已拉取 ${n} 条记录`);
+    } catch (e) { setSyncMsg('拉取失败: ' + e.message); }
+    setSyncing(false);
   };
 
   const handleClearCache = async () => {
@@ -287,7 +329,51 @@ export default function ProfilePage() {
         />
       </div>
 
-      {/* ===== 模块5: 数据与系统 ===== */}
+      {/* ===== 模块5: 云端同步 (Supabase) ===== */}
+      <div className="rounded-xl border p-4 mb-4" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
+        <SectionHeader icon={sbConnected ? Cloud : CloudOff} title="云端同步 (Supabase)" color={sbConnected ? '#16a34a' : '#f97316'} />
+
+        <div className="space-y-2 mb-3">
+          <input type="text" value={sbUrl} onChange={(e) => setSbUrl(e.target.value)}
+            placeholder="Supabase URL (https://xxx.supabase.co)"
+            className="w-full px-3 py-2 rounded-lg text-xs border border-gray-200" />
+          <input type="password" value={sbKey} onChange={(e) => setSbKey(e.target.value)}
+            placeholder="anon key"
+            className="w-full px-3 py-2 rounded-lg text-xs border border-gray-200" />
+          <button onClick={handleSaveSbConfig} disabled={!sbUrl || !sbKey}
+            className="w-full py-2 rounded-lg text-sm font-medium text-white"
+            style={{ backgroundColor: sbConnected ? '#16a34a' : '#2563eb' }}>
+            {sbConnected ? '已连接 ✓' : '保存并测试连接'}
+          </button>
+        </div>
+
+        {sbConnected && (
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <button onClick={handlePush} disabled={syncing}
+                className="flex-1 py-2 rounded-lg text-sm font-medium text-white"
+                style={{ backgroundColor: syncing ? '#93c5fd' : '#2563eb' }}>
+                推送数据 ↑
+              </button>
+              <button onClick={handlePull} disabled={syncing}
+                className="flex-1 py-2 rounded-lg text-sm font-medium"
+                style={{ backgroundColor: syncing ? '#d1d5db' : '#f3f4f6', color: '#374151' }}>
+                拉取数据 ↓
+              </button>
+            </div>
+            {syncMsg && (
+              <div className={`text-xs p-2 rounded-lg ${syncMsg.includes('失败') ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+                {syncMsg}
+              </div>
+            )}
+            <p className="text-xs text-gray-400">
+              推送：本地 → 云端 | 拉取：云端 → 本地（覆盖）
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* ===== 模块6: 数据与系统 ===== */}
       <div className="rounded-xl border p-4 mb-4" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
         <SectionHeader icon={HardDrive} title="数据与系统" color="#8b5cf6" />
 
