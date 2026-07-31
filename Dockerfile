@@ -13,8 +13,8 @@ FROM alpine:3.20
 
 RUN apk add --no-cache unzip wget ca-certificates
 
-# Download PocketBase Linux amd64
-ARG PB_VERSION=0.25.9
+# PocketBase — 版本与本地 pb_data 保持一致
+ARG PB_VERSION=0.27.0
 RUN wget -q "https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip" -O /tmp/pb.zip \
     && unzip -o /tmp/pb.zip -d /usr/local/bin/ \
     && chmod +x /usr/local/bin/pocketbase \
@@ -22,15 +22,10 @@ RUN wget -q "https://github.com/pocketbase/pocketbase/releases/download/v${PB_VE
 
 WORKDIR /app
 
-# Copy built frontend from Stage 1
+# 前端静态文件 → PocketBase 从 pb_public 提供
 COPY --from=builder /build/dist/ /app/pb_public/
-
-# Database migrations
-COPY pb_migrations/ /app/pb_migrations/
-
-# Local database (overridden by Render Disk at runtime)
-COPY pb_data/ /app/pb_data/
 
 EXPOSE 8090
 
+# PocketBase 启动时自动创建 pb_data（挂载到 Render Disk）
 CMD ["sh", "-c", "/usr/local/bin/pocketbase serve --http=0.0.0.0:${PORT:-8090}"]
