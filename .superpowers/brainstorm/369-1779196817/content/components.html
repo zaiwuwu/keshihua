@@ -1,0 +1,56 @@
+<h2>组件树 & 路由规划</h2>
+<p class="subtitle">MVP 阶段文件结构</p>
+
+<div class="section">
+  <h3>路由设计</h3>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr style="background:#f8f9fa"><td style="padding:8px;border:1px solid #dee2e6"><strong>路由</strong></td><td style="padding:8px;border:1px solid #dee2e6"><strong>页面</strong></td><td style="padding:8px;border:1px solid #dee2e6"><strong>说明</strong></td></tr>
+    <tr><td style="padding:8px;border:1px solid #dee2e6">/products</td><td style="padding:8px;border:1px solid #dee2e6">产品列表</td><td style="padding:8px;border:1px solid #dee2e6">Tab1首页，分类筛选，产品卡片</td></tr>
+    <tr style="background:#f8f9fa"><td style="padding:8px;border:1px solid #dee2e6">/products/import</td><td style="padding:8px;border:1px solid #dee2e6">导入Excel</td><td style="padding:8px;border:1px solid #dee2e6">文件选择→解析→预览→确认导入</td></tr>
+    <tr><td style="padding:8px;border:1px solid #dee2e6">/quotations</td><td style="padding:8px;border:1px solid #dee2e6">报价单列表</td><td style="padding:8px;border:1px solid #dee2e6">Tab2，历史报价单</td></tr>
+    <tr style="background:#f8f9fa"><td style="padding:8px;border:1px solid #dee2e6">/quotations/new</td><td style="padding:8px;border:1px solid #dee2e6">新建报价单</td><td style="padding:8px;border:1px solid #dee2e6">勾选产品→计算→商务信息→导出</td></tr>
+    <tr><td style="padding:8px;border:1px solid #dee2e6">/price</td><td style="padding:8px;border:1px solid #dee2e6">价格管理</td><td style="padding:8px;border:1px solid #dee2e6">Tab3，料价更新，批量调价</td></tr>
+    <tr style="background:#f8f9fa"><td style="padding:8px;border:1px solid #dee2e6">/settings</td><td style="padding:8px;border:1px solid #dee2e6">设置</td><td style="padding:8px;border:1px solid #dee2e6">Tab4，公司信息，商务模板</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h3>核心组件树</h3>
+  <div class="mockup">
+    <div class="mockup-header">MVP 组件结构</div>
+    <div class="mockup-body" style="font-size:12px;font-family:monospace;line-height:1.8">
+<pre style="margin:0">
+App
+├── Layout (底部Tab导航)
+│   ├── TabBar (4个Tab按钮)
+│   └── OfflineBanner (离线提示条)
+│
+├── ProductListPage (/products)
+│   ├── SearchBar (搜索)
+│   ├── CategoryFilter (分类标签筛选)
+│   ├── ProductCard[] (产品卡片列表)
+│   └── FloatingAction (导入按钮)
+│
+├── ImportPage (/products/import)
+│   ├── FileUploader (文件选择)
+│   ├── DataPreview (解析预览表格)
+│   └── ImportConfirm (确认导入)
+│
+├── QuotationNewPage (/quotations/new)
+│   ├── ProductPicker (勾选产品+数量)
+│   ├── PriceCalculator (自动计价)
+│   ├── BusinessInfoForm (商务信息)
+│   └── ExportPanel (PDF/长图导出)
+│
+├── PricePage (/price)
+│   ├── MaterialPriceInput (料价输入)
+│   ├── PriceConverter (价格换算)
+│   └── PriceAlert (预警设置)
+│
+└── SettingsPage (/settings)
+    ├── CompanyInfoForm (公司信息)
+    └── TemplateEditor (模板编辑)
+</pre>
+    </div>
+  </div>
+</div>

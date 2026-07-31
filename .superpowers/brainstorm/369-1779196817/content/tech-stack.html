@@ -1,0 +1,44 @@
+<h2>技术选型 & 数据模型</h2>
+<p class="subtitle">MVP阶段技术方案</p>
+
+<div class="section">
+  <h3>技术栈 (PWA MVP)</h3>
+  <table style="width:100%;border-collapse:collapse;font-size:14px">
+    <tr style="background:#f8f9fa"><td style="padding:8px;border:1px solid #dee2e6"><strong>框架</strong></td><td style="padding:8px;border:1px solid #dee2e6">React 18 + Vite</td></tr>
+    <tr><td style="padding:8px;border:1px solid #dee2e6"><strong>样式</strong></td><td style="padding:8px;border:1px solid #dee2e6">TailwindCSS 3 — 移动端优先响应式</td></tr>
+    <tr style="background:#f8f9fa"><td style="padding:8px;border:1px solid #dee2e6"><strong>路由</strong></td><td style="padding:8px;border:1px solid #dee2e6">React Router v6</td></tr>
+    <tr><td style="padding:8px;border:1px solid #dee2e6"><strong>状态管理</strong></td><td style="padding:8px;border:1px solid #dee2e6">Zustand — 轻量、支持持久化</td></tr>
+    <tr style="background:#f8f9fa"><td style="padding:8px;border:1px solid #dee2e6"><strong>离线存储</strong></td><td style="padding:8px;border:1px solid #dee2e6">IndexedDB (Dexie.js) — 产品/报价/客户数据</td></tr>
+    <tr><td style="padding:8px;border:1px solid #dee2e6"><strong>Excel解析</strong></td><td style="padding:8px;border:1px solid #dee2e6">SheetJS (xlsx) — 导入导出</td></tr>
+    <tr style="background:#f8f9fa"><td style="padding:8px;border:1px solid #dee2e6"><strong>PDF导出</strong></td><td style="padding:8px;border:1px solid #dee2e6">html2canvas + jsPDF</td></tr>
+    <tr><td style="padding:8px;border:1px solid #dee2e6"><strong>PWA</strong></td><td style="padding:8px;border:1px solid #dee2e6">vite-plugin-pwa (Workbox)</td></tr>
+    <tr style="background:#f8f9fa"><td style="padding:8px;border:1px solid #dee2e6"><strong>图标</strong></td><td style="padding:8px;border:1px solid #dee2e6">Lucide React</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h3>核心数据模型</h3>
+  <div class="mockup">
+    <div class="mockup-header">IndexedDB 表结构</div>
+    <div class="mockup-body" style="font-size:13px;line-height:1.7">
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px;background:#f0f9ff;padding:10px;border-radius:6px">
+          <strong style="color:#0369a1">products (产品表)</strong>
+          <p style="margin:4px 0">id, 序号, 产品分类, 名称, 容量ml, 规格/套, 成套克重, 颜色, 当日料价, 出厂价格, updatedAt</p>
+        </div>
+        <div style="flex:1;min-width:200px;background:#f0fdf4;padding:10px;border-radius:6px">
+          <strong style="color:#15803d">quotations (报价单表)</strong>
+          <p style="margin:4px 0">id, 客户信息, 产品列表(JSON), 数量, 单价, 总价, 商务信息, 创建时间, 状态</p>
+        </div>
+        <div style="flex:1;min-width:200px;background:#fefce8;padding:10px;border-radius:6px">
+          <strong style="color:#a16207">materialPrice (料价表)</strong>
+          <p style="margin:4px 0">id, 市场均价(元/吨), 每克单价, 更新时间, 来源(手动/自动)</p>
+        </div>
+        <div style="flex:1;min-width:200px;background:#fdf2f8;padding:10px;border-radius:6px">
+          <strong style="color:#be185d">auditLog (操作日志)</strong>
+          <p style="margin:4px 0">id, 操作类型, 操作内容, 前后对比(JSON), 时间戳, 操作人</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

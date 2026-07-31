@@ -1,0 +1,14 @@
+{
+  "appId": "com.quotation.app",
+  "appName": "九顺",
+  "version": "1.3.1",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true,
+    "allowNavigation": ["*"]
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

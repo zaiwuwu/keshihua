@@ -1,0 +1,59 @@
+{
+  "planPath": "docs/superpowers/plans/2026-05-20-export-color-apk-plan.md",
+  "tasks": [
+    {
+      "id": 2,
+      "subject": "Task 1: Install dom-to-image-more dependency",
+      "status": "pending",
+      "description": "**Goal:** 安装 dom-to-image-more 替代 html2canvas 作为长图导出引擎\n\n**Files:**\n- Modify: `package.json`\n\n**Acceptance Criteria:**\n- [ ] `dom-to-image-more` 出现在 `package.json` dependencies 中\n- [ ] `npm install` 成功\n\n**Verify:** `npm ls dom-to-image-more` → 显示版本号\n\n```json:metadata\n{\"files\": [\"package.json\"], \"verifyCommand\": \"npm ls dom-to-image-more\", \"acceptanceCriteria\": [\"dom-to-image-more installed successfully\"]}\n```"
+    },
+    {
+      "id": 3,
+      "subject": "Task 2: Override Tailwind colors with hex @theme",
+      "status": "pending",
+      "description": "**Goal:** 在 `index.css` 中用 `@theme` 定义完整色板，确保 Tailwind v4 全部输出 #RRGGBB\n\n**Files:**\n- Modify: `src/index.css`\n\n**Acceptance Criteria:**\n- [ ] `@theme` 块覆盖 Tailwind 默认所有常用色阶\n- [ ] 每个色阶包含完整 11 级\n- [ ] 全部使用 #RRGGBB 格式\n- [ ] 项目 `npm run build` 正常\n\n**Verify:** `npm run build` → Build success\n\n```json:metadata\n{\"files\": [\"src/index.css\"], \"verifyCommand\": \"npm run build\", \"acceptanceCriteria\": [\"@theme block covers all Tailwind color scales with hex values\", \"project builds successfully\"]}\n```"
+    },
+    {
+      "id": 4,
+      "subject": "Task 3: Create generic exporter.js module",
+      "status": "pending",
+      "blockedBy": [2],
+      "description": "**Goal:** 新建 `src/utils/exporter.js`，提供 `exportToImage` 和 `exportToPDF` 两个通用导出函数\n\n**Files:**\n- Create: `src/utils/exporter.js`\n\n**Acceptance Criteria:**\n- [ ] `exportToImage(elementId, options)` 使用 dom-to-image-more 3x 倍率输出 PNG 长图并触发下载\n- [ ] `exportToPDF(elementId, options)` 使用 window.open + window.print 原生渲染输出 PDF\n- [ ] `forceHexColorsToInline(root)` 遍历 DOM 树，将 computedStyle 中的颜色强制写为内联 #RRGGBB\n- [ ] `toHex(colorString)` 支持 rgb/rgba/oklch → #RRGGBB 转换\n\n**Verify:** `npm run build` → Build success\n\n```json:metadata\n{\"files\": [\"src/utils/exporter.js\"], \"verifyCommand\": \"npm run build\", \"acceptanceCriteria\": [\"exportToImage uses dom-to-image-more 3x PNG\", \"exportToPDF uses window.print for native rendering\", \"forceHexColorsToInline converts all colors to hex inline\", \"toHex handles rgb/rgba/oklch conversion\"]}\n```"
+    },
+    {
+      "id": 5,
+      "subject": "Task 4: Update ExportPanel to use new exporter",
+      "status": "pending",
+      "blockedBy": [4],
+      "description": "**Goal:** 将 ExportPanel 的导入从旧 pdfExporter 切换到新 exporter\n\n**Files:**\n- Modify: `src/components/ExportPanel.jsx`\n\n**Acceptance Criteria:**\n- [ ] import 语句改为新路径 `../utils/exporter`\n- [ ] `npm run build` 无报错\n\n**Verify:** `npm run build` → Build success\n\n```json:metadata\n{\"files\": [\"src/components/ExportPanel.jsx\"], \"verifyCommand\": \"npm run build\", \"acceptanceCriteria\": [\"import path updated to ../utils/exporter\", \"build succeeds\"]}\n```"
+    },
+    {
+      "id": 6,
+      "subject": "Task 5: Delete old pdfExporter.js",
+      "status": "pending",
+      "blockedBy": [5],
+      "description": "**Goal:** 清理废弃的旧导出模块文件\n\n**Files:**\n- Delete: `src/utils/pdfExporter.js`\n\n**Acceptance Criteria:**\n- [ ] `src/utils/pdfExporter.js` 文件已删除\n- [ ] `npm run build` 无报错（证明无残留引用）\n\n**Verify:** `npm run build` → Build success\n\n```json:metadata\n{\"files\": [\"src/utils/pdfExporter.js\"], \"verifyCommand\": \"npm run build\", \"acceptanceCriteria\": [\"old pdfExporter.js deleted\", \"no broken imports\", \"build succeeds\"]}\n```"
+    },
+    {
+      "id": 7,
+      "subject": "Task 6: Create FloatingScrollButton and CustomScrollbar",
+      "status": "pending",
+      "description": "**Goal:** 封装 FloatingScrollButton（一键到底/回顶悬浮按钮）和 CustomScrollbar（自定义快速滚动条）两个独立组件\n\n**Files:**\n- Create: `src/components/FloatingScrollButton.jsx`\n- Create: `src/components/CustomScrollbar.jsx`\n\n**Acceptance Criteria:**\n- [ ] FloatingScrollButton 右下角显示，到底翻转，点击平滑滚动\n- [ ] CustomScrollbar 比例滑块，拖动定位，仅超一屏显示\n\n**Verify:** `npm run build` → Build success\n\n```json:metadata\n{\"files\": [\"src/components/FloatingScrollButton.jsx\", \"src/components/CustomScrollbar.jsx\"], \"verifyCommand\": \"npm run build\", \"acceptanceCriteria\": [\"FloatingScrollButton shows at bottom-right when content overflows\", \"arrow flips direction at bottom\", \"CustomScrollbar shows track+thumb proportional to viewport/content ratio\", \"drag-scroll works on touch and mouse\"]}\n```"
+    },
+    {
+      "id": 8,
+      "subject": "Task 7: Integrate scroll components into pages",
+      "status": "pending",
+      "blockedBy": [7],
+      "description": "**Goal:** 在长列表页面中集成 FloatingScrollButton 和 CustomScrollbar，并为 Layout 滚动容器添加 id\n\n**Files:**\n- Modify: `src/components/Layout.jsx`\n- Modify: `src/pages/QuotationPage.jsx`\n- Modify: `src/pages/QuotationNewPage.jsx`\n- Modify: `src/pages/RecordsPage.jsx`\n\n**Acceptance Criteria:**\n- [ ] Layout 滚动容器添加 id=\"main-scroll\"\n- [ ] 三个长列表页面均导入并使用 FloatingScrollButton 和 CustomScrollbar\n\n**Verify:** `npm run build` → Build success\n\n```json:metadata\n{\"files\": [\"src/components/Layout.jsx\", \"src/pages/QuotationPage.jsx\", \"src/pages/QuotationNewPage.jsx\", \"src/pages/RecordsPage.jsx\"], \"verifyCommand\": \"npm run build\", \"acceptanceCriteria\": [\"Layout scroll container has id main-scroll\", \"QuotationPage integrates both scroll components\", \"QuotationNewPage integrates both scroll components\", \"RecordsPage integrates both scroll components\"]}\n```"
+    },
+    {
+      "id": 9,
+      "subject": "Task 8: Build and verify APK packaging",
+      "status": "pending",
+      "blockedBy": [2, 3, 6, 8],
+      "description": "**Goal:** 运行 `npm run build` 验证前端构建通过，确认 Capacitor Android 同步成功\n\n**Files:**\n- (构建产物验证，无文件改动)\n\n**Acceptance Criteria:**\n- [ ] `npm run build` 无报错\n- [ ] `npx cap sync android` 同步成功\n- [ ] dist/ 产物包含所有必需文件\n\n**Verify:** `npm run build && npx cap sync android` → 均成功\n\n```json:metadata\n{\"files\": [], \"verifyCommand\": \"npm run build && npx cap sync android\", \"acceptanceCriteria\": [\"npm run build succeeds\", \"npx cap sync android succeeds\", \"dist/ contains built assets\"]}\n```"
+    }
+  ],
+  "lastUpdated": "2026-05-20T00:00:00Z"
+}

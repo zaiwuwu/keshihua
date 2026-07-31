@@ -1,0 +1,64 @@
+<h2>报价单可视化APP — 系统架构 & MVP划分</h2>
+<p class="subtitle">6个子系统，分3个阶段迭代交付</p>
+
+<div class="section">
+  <h3>整体架构</h3>
+  <div class="mockup">
+    <div class="mockup-header">PWA 移动Web应用 — 离线优先架构</div>
+    <div class="mockup-body" style="font-size:13px;line-height:1.8">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:#e8f4f8;padding:8px;border-radius:6px;text-align:center"><strong>浏览器层</strong><br/>PWA (Service Worker + IndexedDB 离线缓存)</div>
+        <div style="text-align:center">↓</div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;background:#f0f0f0;padding:8px;border-radius:6px;text-align:center"><strong>展示层</strong><br/>React + TailwindCSS<br/>移动端适配</div>
+          <div style="flex:1;background:#f0f0f0;padding:8px;border-radius:6px;text-align:center"><strong>逻辑层</strong><br/>价格引擎 / 毛利计算<br/>时间戳 / 导出</div>
+          <div style="flex:1;background:#f0f0f0;padding:8px;border-radius:6px;text-align:center"><strong>数据层</strong><br/>IndexedDB<br/>本地持久化</div>
+        </div>
+        <div style="text-align:center">↓</div>
+        <div style="background:#fff3cd;padding:8px;border-radius:6px;text-align:center"><strong>外部集成</strong><br/>Excel解析(xlsx库) / 腾讯文档API / 大宗商品价格API / PDF导出</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>三阶段交付计划</h3>
+  <div class="cards">
+    <div class="card" data-choice="mvp" style="border-left:4px solid #22c55e">
+      <div class="card-body">
+        <h3>Phase 1 — MVP</h3>
+        <p style="color:#22c55e;font-weight:600">本周交付核心闭环</p>
+        <ul style="font-size:13px;padding-left:16px">
+          <li>✅ Excel导入 + 产品展示 + 分类筛选</li>
+          <li>✅ 价格换算引擎(手动+自动)</li>
+          <li>✅ 报价单生成 + PDF导出</li>
+          <li>✅ PWA离线缓存</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" data-choice="phase2" style="border-left:4px solid #3b82f6">
+      <div class="card-body">
+        <h3>Phase 2 — 商务增强</h3>
+        <p style="color:#3b82f6;font-weight:600">第2-3周</p>
+        <ul style="font-size:13px;padding-left:16px">
+          <li>毛利测算 + 价格红线管控</li>
+          <li>客户分级管理 + 专属折扣</li>
+          <li>历史报价追溯</li>
+          <li>时间戳操作日志</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" data-choice="phase3" style="border-left:4px solid #a855f7">
+      <div class="card-body">
+        <h3>Phase 3 — 完善 & 小程序</h3>
+        <p style="color:#a855f7;font-weight:600">第4周+</p>
+        <ul style="font-size:13px;padding-left:16px">
+          <li>腾讯文档实时同步</li>
+          <li>大宗商品API对接</li>
+          <li>批量调价工具</li>
+          <li>微信小程序移植</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

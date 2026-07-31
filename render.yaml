@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: jiusun-app
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: "8090"
+    disk:
+      name: pbdata
+      mountPath: /app/pb_data
+      sizeGB: 1
